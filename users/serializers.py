@@ -31,9 +31,6 @@ class UserContactSerializer(serializers.ModelSerializer):
         ref_name = 'AdminUserContactSerializer'
 
 
-
-
-
 class UserContactUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserContactApplication
