@@ -42,7 +42,7 @@ class Page(BaseModel):
 
 
 class GalleryPhoto(BaseModel):
-    photo = models.ImageField(upload_to='photos/%Y/%m/')
+    photo = models.FileField(upload_to='photos/%Y/%m/')
 
     objects = models.Manager()
 

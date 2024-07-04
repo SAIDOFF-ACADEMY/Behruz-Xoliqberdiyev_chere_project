@@ -10,6 +10,10 @@ class OrderTestCase(APITestCase):
         self.user = User.objects.create_superuser(email='test@mail.com', password='test')
         self.product = Product.objects.create(name='test', content='test', price='1000')
         self.customuser = User.objects.create_user(email='test1@mail.com', password='test')
+
+        self.client.login(email='test@mail.com', password='test')
+
+    def test_all_get_orders(self):
         Order.objects.create(
             product=self.product,
             count=10, free_count=1,
@@ -21,14 +25,22 @@ class OrderTestCase(APITestCase):
             total_price=1000000,
             admin=self.user
         )
-        self.client.login(email='test@mail.com', password='test')
-
-    def test_all_get_orders(self):
         response = self.client.get('/api/v1/admin/orders/orders/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_patch_order(self):
+        Order.objects.create(
+            product=self.product,
+            count=10, free_count=1,
+            customer=self.customuser,
+            longitude=1.0,
+            latitude=1.0,
+            status='created',
+            product_price=10000,
+            total_price=1000000,
+            admin=self.user
+        )
         data = {
             'status': 'delivered',
         }
@@ -43,6 +55,17 @@ class OrderTestCase(APITestCase):
         self.assertEqual(response.data['status'], 'delivered')
 
     def test_get_order(self):
+        Order.objects.create(
+            product=self.product,
+            count=10, free_count=1,
+            customer=self.customuser,
+            longitude=1.0,
+            latitude=1.0,
+            status='created',
+            product_price=10000,
+            total_price=1000000,
+            admin=self.user
+        )
         response = self.client.get('/api/v1/admin/orders/orders/1/')
 
         self.assertEqual(response.status_code, 200)

@@ -144,11 +144,11 @@ class GalleryPhotoTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_superuser(email='test@mail.com', password='test')
-        self.photo = GalleryPhoto.objects.create(photo='test.png')
 
     def test_all_photos_get(self):
         self.client.login(email='test@mail.com', password='test')
         self.photo = GalleryPhoto.objects.create(photo='test1.png')
+        GalleryPhoto.objects.create(photo='test.png')
         response = self.client.get('/api/v1/admin/common/photos/')
 
         photos = GalleryPhoto.objects.count()
@@ -158,8 +158,9 @@ class GalleryPhotoTestCase(APITestCase):
 
     def test_delete_photo(self):
         self.client.login(email='test@mail.com', password='test')
+        GalleryPhoto.objects.create(photo='test.png')
 
-        response = self.client.delete('/api/v1/admin/common/photo/1/')
+        response = self.client.delete('http://127.0.0.1:8000/api/v1/admin/common/photo/1/')
 
         self.assertEqual(response.status_code, 204)
 

@@ -12,7 +12,7 @@ class UserTestCase(APITestCase):
     def test_login_only_admin_users(self):
         token_count = Token.objects.count()
 
-        response = self.client.post('http://127.0.0.1:8000/api/v1/admin/users/users/login/', data={
+        response = self.client.post('/api/v1/admin/users/users/login/', data={
             'email': 'test@mail.com',
             'password': 'test'
         })
@@ -26,7 +26,7 @@ class UserTestCase(APITestCase):
     def test_user_login_failed(self):
         token_count = Token.objects.count()
 
-        response = self.client.post('http://127.0.0.1:8000/api/v1/admin/users/users/login/', data={
+        response = self.client.post('/api/v1/admin/users/users/login/', data={
             'email': 'tes@mail.com',
             'password': 'test'
         })
@@ -40,7 +40,7 @@ class UserTestCase(APITestCase):
     def test_user_logout_successful(self):
         self.client.login(email='test@mail.com', password='test')
 
-        response = self.client.get('http://127.0.0.1:8000/api/v1/admin/users/users/logout/', )
+        response = self.client.get('/api/v1/admin/users/users/logout/', )
 
         self.assertEqual(response.status_code, 204)
 
@@ -50,7 +50,7 @@ class UserTestCase(APITestCase):
 
         self.client.login(email='test@mail.com', password='test')
 
-        response = self.client.get('http://127.0.0.1:8000/api/v1/admin/users/users/')
+        response = self.client.get('/api/v1/admin/users/users/')
         users = User.objects.count()
         admin_users = User.objects.filter(is_staff=True).count()
 
@@ -61,7 +61,7 @@ class UserTestCase(APITestCase):
     def test_user_detail(self):
         self.client.login(email='test@mail.com', password='test')
 
-        response = self.client.get('http://127.0.0.1:8000/api/v1/admin/users/users/1/')
+        response = self.client.get('/api/v1/admin/users/users/1/')
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.user.email)
@@ -69,7 +69,7 @@ class UserTestCase(APITestCase):
 
     def test_user_delete(self):
         self.client.login(email='test@mail.com', password='test')
-        response = self.client.delete('http://127.0.0.1:8000/api/v1/admin/users/users/1/delete/')
+        response = self.client.delete('/v1/admin/users/users/1/delete/')
 
         self.assertEqual(response.status_code, 204)
 
@@ -81,7 +81,7 @@ class UserTestCase(APITestCase):
             'email': 'test1@mail.com',
             'password': 'test',
         }
-        response = self.client.put('http://127.0.0.1:8000/api/v1/admin/users/users/1/update/', data=data)
+        response = self.client.put('/api/v1/admin/users/users/1/update/', data=data)
 
         user = User.objects.get(id=self.user.id)
 
@@ -93,7 +93,7 @@ class UserTestCase(APITestCase):
         data = {
             'full_name': 'test_test',
         }
-        response = self.client.patch('http://127.0.0.1:8000/api/v1/admin/users/users/1/update/', data=data)
+        response = self.client.patch('/api/v1/admin/users/users/1/update/', data=data)
 
         user = User.objects.get(id=self.user.id)
 
@@ -103,7 +103,7 @@ class UserTestCase(APITestCase):
     def test_user_create(self):
         self.client.login(email='test@mail.com', password='test')
 
-        response = self.client.post('http://127.0.0.1:8000/api/v1/admin/users/users/create/', data={
+        response = self.client.post('/api/v1/admin/users/users/create/', data={
             'email': 'new_user@mail.com',
             'full_name': 'new_user',
             'password': 'new_pass',
@@ -125,7 +125,7 @@ class UserContactApplicationTestCase(APITestCase):
         UserContactApplication.objects.create(full_name='test1', phone='+95555142', is_contacted=True)
         UserContactApplication.objects.create(full_name='test2', phone='+9555514772')
 
-        response = self.client.get('http://127.0.0.1:8000/api/v1/admin/users/user_contacts/')
+        response = self.client.get('/api/v1/admin/users/user_contacts/')
 
         user_contacts = UserContactApplication.objects.count()
         user_contacts_contacted = UserContactApplication.objects.filter(is_contacted=True).count()
@@ -138,7 +138,7 @@ class UserContactApplicationTestCase(APITestCase):
         self.client.login(email='test@mail.com', password='test')
         UserContactApplication.objects.create(full_name='test', phone='+95555', is_contacted=True)
 
-        response = self.client.delete('http://127.0.0.1:8000/api/v1/admin/users/user_contact/1/')
+        response = self.client.delete('/api/v1/admin/users/user_contact/1/')
 
         self.assertEqual(response.status_code, 204)
 
@@ -146,7 +146,7 @@ class UserContactApplicationTestCase(APITestCase):
         self.client.login(email='test@mail.com', password='test')
         UserContactApplication.objects.create(full_name='test', phone='+95555', is_contacted=True)
 
-        response = self.client.put('http://127.0.0.1:8000/api/v1/admin/users/user_contact/1/update/', data={
+        response = self.client.put('/api/v1/admin/users/user_contact/1/update/', data={
             'is_contacted': False
         })
 
@@ -159,7 +159,7 @@ class UserContactApplicationTestCase(APITestCase):
         self.client.login(email='test@mail.com', password='test')
         UserContactApplication.objects.create(full_name='test', phone='+95555', is_contacted=True)
 
-        response = self.client.patch('http://127.0.0.1:8000/api/v1/admin/users/user_contact/1/update/', data={
+        response = self.client.patch('/api/v1/admin/users/user_contact/1/update/', data={
             'is_contacted': False
         })
 
@@ -172,7 +172,7 @@ class UserContactApplicationTestCase(APITestCase):
         self.client.login(email='test@mail.com', password='test')
         UserContactApplication.objects.create(full_name='test', phone='+95555', is_contacted=True)
 
-        response = self.client.get('http://127.0.0.1:8000/api/v1/admin/users/user_contact/1/')
+        response = self.client.get('/api/v1/admin/users/user_contact/1/')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['full_name'], 'test')
