@@ -53,4 +53,3 @@ class GalleryPhoto(BaseModel):
         verbose_name = _('Gallery Photo')
         verbose_name_plural = _('Gallery Photos')
         db_table = 'gallery_photo'
-

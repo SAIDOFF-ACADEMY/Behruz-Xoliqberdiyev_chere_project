@@ -32,13 +32,18 @@ class UserCreateManager(UserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractUser, BaseModel):
+class User(AbstractUser):
     telegram_id = models.BigIntegerField(unique=True, null=True, blank=True)
     full_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=30)
+    phone = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    lang = models.CharField(max_length=2, choices=(('uz', 'Uzbek'), ('ru', "Russia")), default='uz')
-    password = models.CharField(max_length=255)
+    lang = models.CharField(max_length=2, choices=[("uz", "Uzbek"), ("ru", "Russian")], default="uz")
+    username = None
+    first_name = None
+    last_name = None
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+    objects = UserCreateManager()
 
     def __str__(self):
         return self.full_name or self.email
@@ -48,22 +53,14 @@ class User(AbstractUser, BaseModel):
         verbose_name_plural = _('Users')
         db_table = 'users'
 
-    username = None
-    first_name = None
-    last_name = None
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-    objects = UserCreateManager()
-
 
 class UserContactApplication(BaseModel):
-    full_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=50, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    message = models.TextField()
     is_contacted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.full_name
+        return self.user.full_name
 
     class Meta:
         verbose_name = _('User Contact Application')

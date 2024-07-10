@@ -10,3 +10,6 @@ drf-yasg==1.21.7
 setuptools==70.2.0
 pillow==10.4.0
 django-environ==0.11.2
+python-telegram-bot==13
+psycopg2~=2.9.9
+requests==2.32.3

@@ -2,9 +2,10 @@ from django.db import models
 from products.models import Product
 from users.models import User
 from django.utils.translation import gettext_lazy as _
+from shared.models import BaseModel
 
 
-class Order(models.Model):
+class Order(BaseModel):
 
     class Status(models.TextChoices):
         CREATED = 'created'
@@ -17,6 +18,7 @@ class Order(models.Model):
     count = models.IntegerField()
     free_count = models.IntegerField(default=0)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    location = models.CharField(max_length=100)
     longitude = models.FloatField()
     latitude = models.FloatField()
     status = models.TextField(max_length=100, choices=Status.choices)
