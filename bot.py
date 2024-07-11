@@ -67,7 +67,15 @@ def name(update: Update, context: CallbackContext) -> int:
 
 
 def main_menu(update: Update, context: CallbackContext) -> int:
-    reply_keyboards = [['Buyurtma berish', "Mening buyurtmalarim"], ["Qo'lab quvvatlash"]]
+    user_id = update.message.from_user.id
+    cursor.execute("SELECT id FROM users WHERE telegram_id = %s", (user_id,))
+    user = cursor.fetchone()
+    cursor.execute("SELECT * FROM orders WHERE customer_id = %s ORDER BY created_at DESC", user)
+    orders = cursor.fetchall()
+    if orders:
+        reply_keyboards = [['Buyurtma berish', "Mening buyurtmalarim"], ["Qo'lab quvvatlash"]]
+    else:
+        reply_keyboards = [['Buyurtma berish'], ["Qo'lab quvvatlash"]]
     update.message.reply_text(
         "Asosiy menu:",
         reply_markup=ReplyKeyboardMarkup(reply_keyboards, one_time_keyboard=True, resize_keyboard=True)
@@ -166,7 +174,6 @@ def confirm_order(update: Update, context: CallbackContext) -> int:
         total_price = context.user_data['total_price']
         status = 'Created'
         location = get_adress(latitude, longitude)
-        print(location)
         cursor.execute('INSERT INTO orders (customer_id, product_id, count, location, total_price, status, free_count, longitude, latitude, status_changed_at, product_price, created_at, updated_at) VALUES '
                        "((SELECT id FROM users WHERE telegram_id = %s), (SELECT id FROM products WHERE name = %s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         (user_id, item, quantity, location, total_price, status, 1, longitude, latitude, datetime.now(), context.user_data['per_item_price'], datetime.now(), datetime.now()))
