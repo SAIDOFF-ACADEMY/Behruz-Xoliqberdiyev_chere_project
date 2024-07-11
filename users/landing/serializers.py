@@ -7,7 +7,7 @@ class UserContactCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserContactApplication
         fields = (
-            'full_name',
-            'phone',
+            'user',
+            'message',
             'is_contacted',
         )

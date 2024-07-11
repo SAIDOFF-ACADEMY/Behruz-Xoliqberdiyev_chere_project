@@ -72,11 +72,3 @@ class UserLoginView(GenericAPIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class UserLogOutView(GenericAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        if hasattr(request.user, 'auth_token'):
-            request.user.auth_token.delete()
-
-        return Response({'detail': "Successfully logged out"}, status=status.HTTP_204_NO_CONTENT)
