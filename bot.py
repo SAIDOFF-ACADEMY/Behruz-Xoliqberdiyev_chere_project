@@ -199,6 +199,7 @@ def my_orders(update: Update, context: CallbackContext) -> int:
             return MAIN_MENU
         else:
             update.message.reply_text('Sizda hali buyurtmalar yoq', reply_markup=ReplyKeyboardRemove())
+            return start(update, context)
     else:
         update.message.reply_text("Ro'yxatdan o'ting", reply_markup=ReplyKeyboardRemove())
         return start(update, context)
