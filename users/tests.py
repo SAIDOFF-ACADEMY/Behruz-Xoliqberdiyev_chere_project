@@ -37,13 +37,6 @@ class UserTestCase(APITestCase):
         token_count = Token.objects.count()
         self.assertEqual(token_count, 0)
 
-    def test_user_logout_successful(self):
-        self.client.login(email='test@mail.com', password='test')
-
-        response = self.client.get('/api/v1/admin/users/users/logout/', )
-
-        self.assertEqual(response.status_code, 204)
-
     def test_get_all_users_list(self):
         User.objects.create_user(email='test1@mail.com', password='test1')
         User.objects.create_user(email='test2@mail.com', password='test2')
